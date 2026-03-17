@@ -41,7 +41,15 @@ function executeTask(step: FlowStepTask, context: Context): boolean {
 }
 
 function executeNotifyTask(step: FlowStepTask, context: Context): boolean {
-    throw new Error("Not implemented");
+    const team = getValueFromContext("team", context);
+    const taskKey = step.id ?? step.task;
+
+    context[taskKey] = {
+        notified: true,
+        team,
+    }
+    return true;
+    
 }
 
 function executeRiskCheckTask(step: FlowStepTask, context: Context): boolean {
