@@ -22,7 +22,7 @@ const route: FastifyPluginAsyncTypebox = async (fastify) => {
         const steps = flow.steps;
         for (const step of steps) {
             const traceResults = executeStep(step, context);
-            trace.push(traceResults)
+            trace.push(...traceResults)
         }
 
         return {
