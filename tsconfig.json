@@ -1,0 +1,57 @@
+{
+    "compilerOptions": {
+        /* Language and Environment */
+        "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+        "lib": [
+            "ES5",
+            "ES6",
+            "ES7"
+        ],
+        // for TypeORM
+        "strictPropertyInitialization": false,
+        /* Modules */
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        },
+        "resolveJsonModule": true,
+        "module": "ES2022" /* Specify what module code is generated. */,
+        "moduleResolution": "Node" /* Specify how TypeScript looks up a file from a given module specifier. */,
+        "typeRoots": [
+            "node_modules/@types",
+            "src/@types"
+        ] /* Specify multiple folders that act like './node_modules/@types'. */,
+        // "types": ["node"] /* Specify type package names to be included without being referenced in a source file. */,
+        /* JavaScript Support */
+        "allowJs": false /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */,
+        /* Emit */
+        "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+        /* Interop Constraints */
+        "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+        "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+        /* Type Checking */
+        "strict": true /* Enable all strict type-checking options. */,
+        "noImplicitThis": true /* Enable error reporting when 'this' is given the type 'any'. */,
+        "noUnusedLocals": true /* Enable error reporting when local variables aren't read. */,
+        "noImplicitReturns": true /* Enable error reporting for codepaths that do not explicitly return in a function. */,
+        "noImplicitOverride": true /* Ensure overriding members in derived classes are marked with an override modifier. */,
+        "allowUnreachableCode": false /* Disable error reporting for unreachable code. */,
+        "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    },
+    "tsc-alias": {
+        "resolveFullPaths": true,
+        "verbose": false
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "src/test/**/*",
+        "**/__mocks__/**/*"
+    ]
+}
