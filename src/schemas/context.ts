@@ -25,7 +25,7 @@ export type FlowStepTask = Static<typeof flowStepSchemaTask>;
 export const flowStepSchemaIf = Type.Object({
     type: Type.Literal("if"),
     id: Type.Optional(Type.String()),
-    cond: Type.Record(Type.String(), Type.Tuple([Type.String(), Type.String()])),
+    cond: Type.Record(Type.String(), Type.String()),
     then: Type.Array(Type.Any()),
     else: Type.Array(Type.Any()),
 })

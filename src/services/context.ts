@@ -99,6 +99,30 @@ function executeIf(step: FlowStepIf, context: Context): RunTrace[] {
     ]
 }
 
+function evaluateCondition(cond: Record<string, string>, context: Context): boolean {
+    const [comparator, values] = Object.entries(cond)[0];
+    const [left, right] = values;
+    const leftValue = parseFloat(getValue("left", left, context));
+    const rightValue = parseFloat(getValue("right", right, context));
+
+    switch (comparator) {
+        case "==":
+            return leftValue == rightValue;
+        case "!=":
+            return leftValue != rightValue;
+        case ">":
+            return leftValue > rightValue;
+        case ">=":
+            return leftValue >= rightValue;
+        case "<":
+            return leftValue < rightValue;
+        case "<=":
+            return leftValue <= rightValue;
+        default:
+            throw new Error(`Unknown comparator ${comparator}`);
+    }
+}
+
 function getValue(name: string, value: string, context: Context): string {
     if (value.startsWith("$")) {
         return getValueFromContext(value, context);
