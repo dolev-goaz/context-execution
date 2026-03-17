@@ -6,7 +6,7 @@ export interface RunTraceTask {
     ok: boolean;
 }
 export interface RunTraceIf {
-    id: string;
+    id?: string;
     type: typeof stepType.if;
     branch: "then" | "else"
 }

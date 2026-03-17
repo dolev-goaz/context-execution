@@ -6,7 +6,16 @@ const MIN_RISK = 0;
 const MAX_RISK = 10;
 type Context = Record<string, any>;
 
-export function executeStep(step: FlowStep, context: Context): RunTrace {
+function executeSteps(steps: FlowStep[], context: Context): RunTrace[] {
+    let trace: RunTrace[] = [];
+    for (const step of steps) {
+        const stepTrace = executeStep(step, context);
+        trace.push(...stepTrace);
+    }
+    return trace;
+}
+
+export function executeStep(step: FlowStep, context: Context): RunTrace[] {
     switch (step.type) {
         case stepType.task: {
             let success = true;
@@ -16,11 +25,12 @@ export function executeStep(step: FlowStep, context: Context): RunTrace {
                 console.error(`Error executing task ${step.task}:`, e); 
                 success = false;
             }
-            return {
+            const trace = {
                 id: step.id ?? step.task,
                 type: step.type,
                 ok: success,
             }
+            return [trace];
         }
         case stepType.if:
             return executeIf(step, context);
@@ -67,8 +77,26 @@ function executeRiskCheckTask(step: FlowStepTask, context: Context): boolean {
     return true;
 }
 
-function executeIf(step: FlowStepIf, context: Context): RunTrace {
-    throw new Error("Not implemented");
+function executeIf(step: FlowStepIf, context: Context): RunTrace[] {
+    const result = evaluateCondition(step.cond, context);
+
+    let innerTrace;
+    if (result) {
+        innerTrace = executeSteps(step.then, context);
+    } else {
+        innerTrace = executeSteps(step.else, context);
+    }
+
+    const trace: RunTrace = {
+        id: step.id,
+        type: step.type,
+        branch: result ? "then" : "else",
+    }
+
+    return [
+        trace,
+        ...innerTrace
+    ]
 }
 
 
