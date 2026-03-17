@@ -51,7 +51,7 @@ function executeTask(step: FlowStepTask, context: Context): boolean {
 }
 
 function executeNotifyTask(step: FlowStepTask, context: Context): boolean {
-    const team = getValueFromContext("team", context);
+    const team = getValue("team", step.input.team, context);
     const taskKey = step.id ?? step.task;
 
     context[taskKey] = {
@@ -63,8 +63,8 @@ function executeNotifyTask(step: FlowStepTask, context: Context): boolean {
 }
 
 function executeRiskCheckTask(step: FlowStepTask, context: Context): boolean {
-    const country = getValueFromContext("country", context);
-    const amountStr = getValueFromContext("amount", context);
+    const country = getValue("country", step.input.country, context);
+    const amountStr = getValue("amount", step.input.amount, context);
     const amount = parseFloat(amountStr);
     const countryRisk = country === "IL" ? 1 : 0;
     const riskScore = Math.round(amount / 10_000 + countryRisk)
@@ -99,10 +99,27 @@ function executeIf(step: FlowStepIf, context: Context): RunTrace[] {
     ]
 }
 
+function getValue(name: string, value: string, context: Context): string {
+    if (value.startsWith("$")) {
+        return getValueFromContext(value, context);
+    }
+    if (!value) {
+        throw new Error(`Missing parameter ${name}`)
+    }
+    return value;
+}
 
 function getValueFromContext(key: string, context: Context): string {
-    if (!(key in context)) {
-        throw new Error(`Key ${key} not found in context`);
+    if (!key.startsWith("$")) {
+        throw new Error(`Invalid key ${key}. Keys must start with $`);
+    }
+    const keyParts = key.slice(2).split(".");
+    let currentContext = context;
+    for (const part of keyParts) {
+        if (!(part in currentContext)) {
+            throw new Error(`Key ${key} not found in context`);
+        }
+        currentContext = currentContext[part];
     }
     return context[key];
 }
