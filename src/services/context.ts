@@ -4,7 +4,7 @@ import type { RunTrace } from "@/types";
 
 const MIN_RISK = 0;
 const MAX_RISK = 10;
-type Context = Record<string, string>;
+type Context = Record<string, any>;
 
 export function executeStep(step: FlowStep, context: Context): RunTrace {
     switch (step.type) {
@@ -54,7 +54,7 @@ function executeRiskCheckTask(step: FlowStepTask, context: Context): boolean {
     const clampedRiskScore = Math.min(Math.max(riskScore, MIN_RISK), MAX_RISK);
 
     const outKey = step.id ?? step.task;
-    context[outKey] = clampedRiskScore.toString();
+    context[outKey] = { riskScore: clampedRiskScore };
     
     return true;
 }
