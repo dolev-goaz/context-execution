@@ -7,6 +7,13 @@ export const taskType = {
 
 export type TaskType = typeof taskType[keyof typeof taskType];
 
+export const stepType = {
+    task: "task",
+    if: "if",
+} as const
+
+export type StepType = typeof stepType[keyof typeof stepType];
+
 export const flowStepSchemaTask = Type.Object({
     type: Type.Literal("task"),
     task: Type.Enum(taskType),

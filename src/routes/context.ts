@@ -1,7 +1,8 @@
 import type { FastifySchema } from "fastify";
-import { FastifyPluginAsyncTypebox, Type} from "@fastify/type-provider-typebox";
+import { type FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox";
 import { flowSchema } from "@/schemas/context";
-
+import { executeStep } from "@/services/context";
+import type { RunTrace } from "@/types";
 
 
 const schemas = {
@@ -17,9 +18,16 @@ const schemas = {
 const route: FastifyPluginAsyncTypebox = async (fastify) => {
     fastify.post("/", { schema: schemas.run }, async (req, reply) => {
         const { flow, context } = req.body;
+        const trace: RunTrace[] = [];
         const steps = flow.steps;
         for (const step of steps) {
+            const traceResults = executeStep(step);
+            trace.push(traceResults)
+        }
 
+        return {
+            context,
+            trace
         }
     });
 };
