@@ -99,7 +99,7 @@ function executeIf(step: FlowStepIf, context: Context): RunTrace[] {
     ]
 }
 
-function evaluateCondition(cond: Record<string, string>, context: Context): boolean {
+function evaluateCondition(cond: Record<string, string[]>, context: Context): boolean {
     const [comparator, values] = Object.entries(cond)[0];
     const [left, right] = values;
     const leftValue = parseFloat(getValue("left", left, context));
