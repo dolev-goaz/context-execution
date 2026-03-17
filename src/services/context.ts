@@ -123,7 +123,7 @@ function evaluateCondition(cond: Record<string, string[]>, context: Context): bo
     }
 }
 
-function getValue(name: string, value: string, context: Context): string {
+export function getValue(name: string, value: string, context: Context): string {
     if (value.startsWith("$")) {
         return getValueFromContext(value, context);
     }
@@ -138,12 +138,12 @@ function getValueFromContext(key: string, context: Context): string {
         throw new Error(`Invalid key ${key}. Keys must start with $`);
     }
     const keyParts = key.slice(2).split(".");
-    let currentContext = context;
+    let currentContext: any = context;
     for (const part of keyParts) {
         if (!(part in currentContext)) {
             throw new Error(`Key ${key} not found in context`);
         }
         currentContext = currentContext[part];
     }
-    return context[key];
+    return currentContext;
 }
